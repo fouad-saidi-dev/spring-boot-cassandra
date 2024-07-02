@@ -6,7 +6,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.UUID;
 
-@Table("products")
+@Table("product")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

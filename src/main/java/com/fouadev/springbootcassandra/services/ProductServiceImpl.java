@@ -3,7 +3,9 @@ package com.fouadev.springbootcassandra.services;
 
 import com.fouadev.springbootcassandra.entities.Product;
 import com.fouadev.springbootcassandra.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.UUID;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
     private ProductRepository productRepository;
 
     public ProductServiceImpl(ProductRepository productRepository) {
@@ -26,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
+                .quantity(product.getQuantity())
                 .build();
         return productRepository.save(product);
     }
@@ -37,15 +41,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Product product) {
+        logger.info("Updating product: {}", product.getId());
         Product product1 = productRepository.findById(product.getId()).orElse(null);
         if (product1 == null) throw new RuntimeException("Product not found");
-        product = Product.builder()
+        product1 = Product.builder()
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
                 .build();
-        Product updatedProduct = productRepository.save(product);
+        Product updatedProduct = productRepository.save(product1);
         return updatedProduct;
     }
 
